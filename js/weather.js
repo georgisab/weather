@@ -77,7 +77,7 @@ function getWeatherNow(searchObj) {
             url: 'http://api.openweathermap.org/data/2.5/weather?' + query + '&units=metric&appid=0a05d5c30967b3cca4db61408d3eb63c',
             method: 'GET',
             success: function (data) {
-              console.log(data);
+             
                ko.applyBindings(new weatherModel(data),  document.getElementById('one'));
 
             },
@@ -113,8 +113,8 @@ function weatherModel(data) {
     self.weather = data.weather[0].main;
     self.city = data.name;
     self.country = data.sys.country;
-    self.tempMax = Math.round(data.main.temp_max) + " C";
-    self.tempMin = Math.round(data.main.temp_min) + " C";
+    self.tempMax = Math.round(data.main.temp_max);
+    self.tempMin = Math.round(data.main.temp_min);
     self.url = 'http://openweathermap.org/img/w/' + data.weather[0].icon + '.png';
     self.speed = data.wind.speed;
     self.pressure = data.main.pressure;
@@ -124,11 +124,11 @@ function weatherModel(data) {
 function WeatherForcastModel(item) {
       var self = this;
 
-      self.temp =ko.observable( (item.main ?Math.round( item.main.temp) : '') + ' C'),
+      self.temp =ko.observable( (item.main ?Math.round( item.main.temp) : '')),
       self.weather =ko.observable( item.weather ?item.weather[0].description : ''),
       self.url =ko.observable( 'http://openweathermap.org/img/w/' + (item.weather ? item.weather[0].icon : '')+ '.png'),
       self.speed = ko.observable( (item.wind ? item.wind.speed : '') + ' m/s'),
-      self.dt_txt =ko.observable( item.dt? moment(item.dt_txt + 'Z').format('HH:mm DD/MM/YYYY ') : '')
+      self.dt_txt =ko.observable( item.dt? moment(item.dt_txt + 'Z').format('HH:mm DD/MM/YY ') : '')
 
 }
 
@@ -137,7 +137,7 @@ function forecastModel() {
     self.list = ko.observableArray([]);
     self.adddata = function (data) {
         $.each(data, function (index, item) {
-       console.log(this);
+      
               self.list.push(new WeatherForcastModel(item));
         });
     }
